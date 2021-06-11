@@ -1,0 +1,32 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: springboot-backend
+  labels:
+    app: springboot-backend
+    tier: backend
+    env: ${ENV}
+spec:
+  selector:
+    matchLabels:
+      app: springboot
+      tier: backend
+      env: ${ENV}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: springboot
+        tier: backend
+        env: ${ENV}
+    spec:
+      containers:
+        - image: robeferre/example-service:${GIT_COMMIT}
+          name: example-service
+          ports:
+            - containerPort: 8080
+              name: ci-deploy
+          env:
+            - name: ENV
+              value: ${ENV}
